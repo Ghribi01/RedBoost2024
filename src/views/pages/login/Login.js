@@ -15,11 +15,11 @@ import {
   CTooltip,
   CAlert,
 } from '@coreui/react'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cibMailRu, cilWarning } from '@coreui/icons'
 import { useFormik } from 'formik'
 import signinValidation from './signinValidation'
-import ForgetPass from '../../../components/ResetPass/ForgetPass'
 import axiosInstance from '../../../axiosInstance'
 import { handleLogin } from '../../../app/features/login/loginSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -29,6 +29,7 @@ const Login = ({ setIsLogged, isLogged }) => {
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(false)
   const state = useSelector((state) => state.loginSlice)
 
   const { values, handleChange, handleSubmit, touched, errors } = useFormik({
@@ -117,10 +118,13 @@ const Login = ({ setIsLogged, isLogged }) => {
                           handleChange(e)
                           handleStore('password', e.target.value)
                         }}
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="Password"
                         autoComplete="current-password"
                       />
+                      <CInputGroupText onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <FaEye /> : <FaEyeSlash />}
+                      </CInputGroupText>
                       {errors.password && touched.password && (
                         <CTooltip content={errors.password} placement="top">
                           <CInputGroupText>
@@ -140,7 +144,11 @@ const Login = ({ setIsLogged, isLogged }) => {
                         </CButton>
                       </CCol>
                       <CCol xs={6} className="text-right">
-                        <CButton onClick={() => setVisible(true)} color="link" className="px-0">
+                        <CButton
+                          onClick={() => navigate('/password-reset')}
+                          color="link"
+                          className="px-0"
+                        >
                           Forgot password?
                         </CButton>
                       </CCol>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
+import { set } from '../app/features/appSlice/appSlice'
 import {
   CCloseButton,
   CSidebar,
@@ -21,9 +21,12 @@ import navigation from '../_nav'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-  const unfoldable = useSelector((state) => state.sidebarUnfoldable)
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const unfoldable = useSelector((state) => state.app.unfoldable)
 
+  const sidebarShow = useSelector((state) => state.app.sidebarShow)
+  const handleUnfoldable = () => {
+    dispatch(set({ unfoldable: !unfoldable }))
+  }
   return (
     <CSidebar
       className="border-end"
@@ -48,9 +51,7 @@ const AppSidebar = () => {
       </CSidebarHeader>
       <AppSidebarNav items={navigation} />
       <CSidebarFooter className="border-top d-none d-lg-flex">
-        <CSidebarToggler
-          onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}
-        />
+        <CSidebarToggler onClick={handleUnfoldable} />
       </CSidebarFooter>
     </CSidebar>
   )

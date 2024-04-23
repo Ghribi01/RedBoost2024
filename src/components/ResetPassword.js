@@ -1,7 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from './Images/whiteLogo.png'
 import { Link } from 'react-router-dom'
+import { CAlert } from '@coreui/react'
+import axiosInstance from '../axiosInstance'
+import { useRef } from 'react'
 function ResetPassword() {
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState(null)
+  const [newPassword, setNewPassword] = useState()
+  const [confirmation, setConfirmation] = useState()
+  const [step, setStep] = useState(1)
+  const inputRef = useRef()
+  const handleSubmit = async () => {
+    try {
+      const response = await axiosInstance.post('/forget-password', {
+        email: email,
+      })
+      if (response.data && response.data.success) {
+        console.log('Password reset link sent successfully , Write the code down')
+        setMessage('Password reset link sent successfully , Write the code down')
+        setStep(2)
+        inputRef.current.value = ''
+      } else {
+        console.log('Error sending email')
+        setMessage('Error sending email') // Update message state with an error message
+      }
+    } catch (error) {
+      console.log('Error:', error)
+      setMessage('Error occurred. Please try again.') // Set a generic error message
+    }
+  }
   return (
     <section
       className=" py-3 py-md-5 py-xl-8 d-flex align-items-center"
@@ -24,10 +52,11 @@ function ResetPassword() {
                   alt="RedBoost Logo"
                 />
                 <hr className="border-primary-subtle mb-4" />
-                <h2 className="h1 mb-4">We make digital products that drive you to stand out.</h2>
+                <h2 className="h1 mb-4">
+                  Empowering Innovation: Fueling Growth for Tunisian Startups and SMEs.
+                </h2>
                 <p className="lead mb-5">
-                  We write words, take photos, make videos, and interact with artificial
-                  intelligence.
+                  Building Sustainable Ventures through Tailored Acceleration Programs.
                 </p>
                 <div className="text-endx">
                   <svg
@@ -56,23 +85,75 @@ function ResetPassword() {
                         password.
                       </h3>
                     </div>
+                    {message ? <CAlert color="success">{message}</CAlert> : null}
                   </div>
                 </div>
                 <form action="#!">
                   <div className="row gy-3 overflow-hidden">
                     <div className="col-12">
                       <div className="form-floating mb-3">
-                        <input
-                          type="email"
-                          className="form-control"
-                          name="email"
-                          id="email"
-                          placeholder="name@example.com"
-                          required
-                        />
-                        <label htmlFor="email" className="form-label">
-                          Email
-                        </label>
+                        {step === 1 && (
+                          <>
+                            {' '}
+                            <input
+                              type="email"
+                              className="form-control"
+                              name="email"
+                              id="email"
+                              placeholder="name@example.com"
+                              required
+                              ref={inputRef}
+                              onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <label htmlFor="email" className="form-label">
+                              Email
+                            </label>{' '}
+                          </>
+                        )}
+                        {step === 2 && (
+                          <>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="code"
+                              id="code"
+                              placeholder="Write your code"
+                              required
+                              onChange={(e) => setCode(e.target.value)}
+                            />
+                            <label htmlFor="code" className="form-label">
+                              Code
+                            </label>{' '}
+                          </>
+                        )}
+                        {step === 3 && (
+                          <>
+                            <div className="mb-3">
+                              {' '}
+                              <input
+                                type="text"
+                                className="form-control"
+                                name="newPassword"
+                                id="newPssword"
+                                placeholder="New Password"
+                                required
+                                onChange={(e) => setNewPassword(e.target.value)}
+                              />
+                            </div>
+                            <div className="mb-3">
+                              {' '}
+                              <input
+                                type="text"
+                                className="form-control"
+                                name="confirmation"
+                                id="confirmation"
+                                placeholder="Repeat Your Password"
+                                required
+                                onChange={(e) => setConfirmation(e.target.value)}
+                              />
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="col-12">
@@ -81,6 +162,7 @@ function ResetPassword() {
                           style={{ backgroundColor: '#044c54', color: 'white' }}
                           className="btn  btn-lg"
                           type="submit"
+                          onClick={handleSubmit}
                         >
                           Reset Password
                         </button>

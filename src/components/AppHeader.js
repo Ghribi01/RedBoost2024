@@ -27,13 +27,16 @@ import {
 
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
-
+import { set } from '../app/features/appSlice/appSlice'
 const AppHeader = ({ userData, setIsLogged }) => {
   const headerRef = useRef()
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const sidebarShow = useSelector((state) => state.app.sidebarShow)
+  const handleToggleSidebar = () => {
+    dispatch(set({ sidebarShow: !sidebarShow }))
+  }
 
   useEffect(() => {
     document.addEventListener('scroll', () => {
@@ -44,10 +47,7 @@ const AppHeader = ({ userData, setIsLogged }) => {
   return (
     <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
       <CContainer className="border-bottom px-4" fluid>
-        <CHeaderToggler
-          onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
-          style={{ marginInlineStart: '-14px' }}
-        >
+        <CHeaderToggler onClick={handleToggleSidebar} style={{ marginInlineStart: '-14px' }}>
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderNav className="d-none d-md-flex">

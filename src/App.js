@@ -49,7 +49,7 @@ const App = () => {
           setUserEmail('')
         }
         setLoading(false)
-        console.log('checkAuth : ', response.data)
+        console.log('checkAuth:', response.data)
       })
     }
     checkAuth()

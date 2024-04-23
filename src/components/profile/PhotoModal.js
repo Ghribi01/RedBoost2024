@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CButton } from '@coreui/react'
 import ImageCropper from './ImageCropper'
 function PhotoModal({ setImage, visible, setVisible }) {
+  
   return (
     <>
       <CModal

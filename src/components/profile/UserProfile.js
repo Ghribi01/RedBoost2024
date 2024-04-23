@@ -17,7 +17,8 @@ import axiosInstance from '../../axiosInstance'
 const UserProfile = () => {
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const email = 'ghribim079@gmail.com'
+
+  const email = 'oussema@gmail.com'
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -43,23 +44,28 @@ const UserProfile = () => {
         <>
           <CRow>
             <CCol>
-              <UserProfileHeader userData={userData} />
+              <UserProfileHeader userData={userData} setUserData={setUserData} />
             </CCol>
           </CRow>
 
           <CRow className="mb-3">
             <CCol xs={12} md={6} className="mb-3 mb-md-0">
-              <PersonalDetails userData={userData} />
+              <PersonalDetails userData={userData} setUserData={setUserData} />
             </CCol>
             <CCol xs={12} md={6} className="mb-3 mb-md-0">
               <CCard>
                 <CCardHeader className="bg-dark text-light">History</CCardHeader>
-                <CCardBody>
+                <CCardBody style={{ maxHeight: '600px', overflow: 'auto' }}>
                   <CTable>
                     <CTableBody>
                       {userData.logs.map((log, index) => (
                         <CAlert key={index} color={getColorByIndex(index)}>
-                          {log.date} : {log.events}
+                          {log.date} :{' '}
+                          {log.events.map((event, eventIndex) => (
+                            <span style={{ backgroundColor: 'transparent' }} key={eventIndex}>
+                              {event}
+                            </span>
+                          ))}
                         </CAlert>
                       ))}
                     </CTableBody>

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const historySchema = new mongoose.Schema({
   date: {
@@ -9,7 +9,7 @@ const historySchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
-});
+})
 
 // Single Admin Schema
 const UserSchema = new mongoose.Schema({
@@ -45,15 +45,15 @@ const UserSchema = new mongoose.Schema({
   },
   adress: {
     type: String,
-    default: "Undefined",
+    default: 'Undefined',
   },
   linkedIn: {
     type: String,
-    default: "Undefined",
+    default: 'Undefined',
   },
   birthday: {
     type: String,
-    default: "Undefined",
+    default: 'Undefined',
   },
   exp: {
     type: String,
@@ -61,11 +61,11 @@ const UserSchema = new mongoose.Schema({
   },
   matricule: {
     type: String,
-    default: "Undefined",
+    default: 'Undefined',
   },
   cin: {
     type: String,
-    default: "Undefined",
+    default: 'Undefined',
   },
   image: {
     data: Buffer,
@@ -75,8 +75,12 @@ const UserSchema = new mongoose.Schema({
     type: [historySchema],
     default: [],
   },
-});
+  bio: {
+    type: String,
+    default: 'Undefined',
+  },
+})
 
-const UserModel = mongoose.model("users", UserSchema);
+const UserModel = mongoose.model('users', UserSchema)
 
-module.exports = UserModel;
+module.exports = UserModel
