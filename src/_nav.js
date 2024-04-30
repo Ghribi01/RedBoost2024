@@ -32,22 +32,22 @@ const _nav = [
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
   {
-    component: CNavGroup,
+    component: CNavItem,
     name: 'Program Monitoring',
     to: 'Monitoring',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Activities',
-        to: 'Activities',
-      },
-      {
-        component: CNavItem,
-        name: 'Task Managment',
-        to: 'TaskManagment',
-      },
-    ],
+    // items: [
+    //   {
+    //     component: CNavItem,
+    //     name: 'Activities',
+    //     to: 'Activities',
+    //   },
+    //   {
+    //     component: CNavItem,
+    //     name: 'Task Managment',
+    //     to: 'TaskManagment',
+    //   },
+    // ],
   },
   {
     component: CNavTitle,

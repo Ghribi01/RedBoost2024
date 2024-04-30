@@ -21,10 +21,12 @@ import {
   CTableBody,
   CPagination,
   CPaginationItem,
+  CSpinner,
 } from '@coreui/react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import AddActivity from './AddActivity'
+import { useLocation } from 'react-router-dom'
 
 const EventList = ({ events }) => {
   const itemsPerPage = 5
@@ -92,33 +94,32 @@ const EventList = ({ events }) => {
 
 function Activities() {
   const [open, setOpen] = useState(false)
+  const location = useLocation()
+  const program = location.state.program
   const handleAddActivity = () => {
     alert('Add Activity clicked!')
   }
-
-  // Mock data for program information and events
+  if (!program) {
+    return (
+      <CContainer style={{ padding: '20px' }} className="mt-4">
+        <CRow>
+          <CCol xs="auto">
+            <CSpinner color="primary" />
+          </CCol>
+        </CRow>
+      </CContainer>
+    )
+  }
   const programInfo = [
     {
       icon: <RiMiniProgramFill />,
       name: 'Program Name',
-      value: 'Sample Program',
+      value: program.programTitle,
     },
-    { icon: <FaHourglassStart />, name: 'Start Date', value: '2024-05-01' },
-    { icon: <FaHourglassEnd />, name: 'End Date', value: '2024-05-31' },
-    { icon: <AiFillDollarCircle />, name: 'Budget', value: '$10,000' },
-    { icon: <GiPirateCaptain />, name: 'Program Lead', value: 'John Doe' },
-  ]
-
-  const events = [
-    { id: 1, title: 'Activity1', date: '2024-05-05' },
-    { id: 2, title: 'Activity2', date: '2024-05-15' },
-    { id: 2, title: 'Activity2', date: '2024-05-15' },
-    { id: 2, title: 'Activity2', date: '2024-05-15' },
-    { id: 2, title: 'Activity2', date: '2024-05-15' },
-    { id: 2, title: 'Activity2', date: '2024-05-15' },
-    { id: 2, title: 'Activity2', date: '2024-05-15' },
-    { id: 2, title: 'Activity2', date: '2024-05-15' },
-    // Add more event objects here as needed
+    { icon: <FaHourglassStart />, name: 'Start Date', value: program.startDate },
+    { icon: <FaHourglassEnd />, name: 'End Date', value: program.endDate },
+    { icon: <AiFillDollarCircle />, name: 'Budget', value: program.budget },
+    { icon: <GiPirateCaptain />, name: 'Program Lead', value: program.programLead },
   ]
 
   return (
@@ -131,7 +132,7 @@ function Activities() {
             <CCardBody>
               <FullCalendar
                 plugins={[dayGridPlugin]}
-                events={events}
+                events={program.activities}
                 initialView="dayGridMonth"
                 headerToolbar={{
                   left: 'prev,next today',
@@ -195,7 +196,7 @@ function Activities() {
           <CCard className="text-center mb-3">
             <CCardHeader className="bg-dark text-light">Activities List</CCardHeader>
             <CCardBody>
-              <EventList events={events} />
+              <EventList events={program.activities} />
             </CCardBody>
           </CCard>
         </CCol>

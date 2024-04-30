@@ -6,7 +6,7 @@ import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
 import axiosInstance from './axiosInstance'
 import ResetPassword from './components/ResetPassword'
-import { setUserData } from './app/features/userData/userData'
+// import { setUserData } from './app/features/userData/userData'
 import { setEvents } from './app/features/events/events'
 // import ProtectedRoute from './ProtectedRoute'
 // Containers

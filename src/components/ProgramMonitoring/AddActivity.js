@@ -9,13 +9,29 @@ import {
   CFormInput,
   CFormTextarea,
 } from '@coreui/react'
-
+import axiosInstance from '../../axiosInstance.js'
 function AddActivity({ open, setOpen }) {
   const [allDay, setAllDay] = useState(false) // State to track "All Day Activity" checkbox
+  const [activity, setActivity] = useState()
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setActivity((prevAct) => ({
+      ...prevAct,
+      [name]: value,
+    }))
+  }
+  console.log(activity)
 
   const handleAddActivity = () => {
-    // Handle adding activity logic here (to be implemented)
-    setOpen(false) // Close modal after adding activity
+    try {
+      const response = axiosInstance.post('/addActivity',activity)
+      if (response.data) {
+        console.log('Activity created successfully')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    setOpen(false)
   }
 
   return (
@@ -32,16 +48,20 @@ function AddActivity({ open, setOpen }) {
         <CModalBody>
           <CFormInput
             type="text"
-            id="activityName"
+            id="name"
+            name="name"
             placeholder="Activity Name"
             text="Must be 6-20 characters long."
             aria-describedby="exampleFormControlInputHelpInline"
+            onChange={handleChange}
           />
           <CFormTextarea
             id="description"
+            name="description"
             placeholder="Description"
             rows={3}
             text="Must be 8-20 words long."
+            onChange={handleChange}
           ></CFormTextarea>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -63,14 +83,29 @@ function AddActivity({ open, setOpen }) {
                 defaultValue="#563d7c"
                 label="Color :"
                 title="Choose your color"
+                onChange={handleChange}
               />
             </div>
           </div>
 
           {allDay ? (
             <>
-              <CFormInput label="Start Day:" type="date" id="startDay" placeholder="Start Day" />
-              <CFormInput label="End Day:" type="date" id="endDay" placeholder="End Day" />
+              <CFormInput
+                label="Start Day:"
+                type="date"
+                id="startDay"
+                name="startDate"
+                placeholder="Start Day"
+                onChange={handleChange}
+              />
+              <CFormInput
+                label="End Day:"
+                type="date"
+                name="endDate"
+                id="endDay"
+                placeholder="End Day"
+                onChange={handleChange}
+              />
             </>
           ) : (
             <>
@@ -78,13 +113,17 @@ function AddActivity({ open, setOpen }) {
                 label="Start Date & Time:"
                 type="datetime-local"
                 id="startDateTime"
+                name="startDate"
                 placeholder="Start Date & Time"
+                onChange={handleChange}
               />
               <CFormInput
                 label="End Date & Time:"
                 type="datetime-local"
                 id="endDateTime"
+                name="endDate"
                 placeholder="End Date & Time"
+                onChange={handleChange}
               />
             </>
           )}

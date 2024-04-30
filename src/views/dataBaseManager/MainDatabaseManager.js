@@ -1,40 +1,25 @@
 import React from 'react'
 import { CRow, CCol, CCard, CCardBody, CButton } from '@coreui/react'
-import { DocsLink } from 'src/components'
-
-const ProjectCard = ({ logo, title, onView }) => {
-  return (
-    <CCard className="mb-4">
-      <CCardBody className="d-flex flex-column">
-        <div className="d-flex justify-content-center align-items-center mb-5" style={{ height: '125px' }}>
-          <img src={logo} alt="Project Logo" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-        </div>
-        <h5 className="text-center">{title}</h5>
-        <div className="mt-auto d-grid">
-          <CButton color="primary" onClick={onView}>View</CButton>
-        </div>
-      </CCardBody>
-    </CCard>
-  )
-}
-
+import { ProgramCard } from '../../components/ProgramCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { loadPrograms } from '../../app/features/programs/programsSlice'
 const MainDatabaseManager = () => {
-  const projects = [
-    { logo: 'https://redstart.tn/wp-content/uploads/2023/01/Fichier-1@4x-1024x680.png', title: 'Women Go Green' },
-    { logo: 'https://redstart.tn/wp-content/uploads/2023/05/creactlogo-v2-1024x266.png', title: 'CREACT4MED' },
-    // Add more projects as needed
-  ]
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(loadPrograms())
+  }, [dispatch])
+  const programs = useSelector((state) => state.programsSlice.programs)
 
   return (
     <>
       <CCard className="mb-4">
         <CCardBody>
           <CRow>
-            {projects.map((project, index) => (
+            {programs.map((program, index) => (
               <CCol key={index} xs={12} sm={6} md={4} lg={3}>
-                <ProjectCard
-                  logo={project.logo}
-                  title={project.title}
+                <ProgramCard
+                  program={program}
                   onView={() => console.log(`Viewing ${project.title}`)}
                 />
               </CCol>
