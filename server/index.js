@@ -86,6 +86,7 @@ app.post('/loadPrograms', handleProgram)
 app.post('/addActivity', handleActivity)
 app.delete('/deleteActivity/:activityId', handleActivity)
 app.put('/updateActivity/:activityId', handleActivity)
+app.post('/loadActivities', handleActivity)
 app.post('/loadUsers', users)
 // Database + Server Connection Validation
 mongoose

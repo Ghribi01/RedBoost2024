@@ -5,7 +5,17 @@ const Activity = require('../../database/models/ActivitySchema')
 
 // Middleware to parse request body
 router.use(express.json())
-
+router.post('/loadActivities', async (req, res) => {
+  try {
+    // Fetch usres from the database
+    const activityId = req.body
+    const activities = await Activity.find({ _id: { $in: activityId } })
+    res.status(200).json(activities)
+  } catch (error) {
+    console.error('Error loading activities:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
 // Route to add an activity
 router.post('/addActivity', async (req, res) => {
   try {
@@ -14,10 +24,11 @@ router.post('/addActivity', async (req, res) => {
       return res.status(400).json({ error: 'Invalid activity data' })
     }
 
-    const { programId,...activityData } = req.body
+    const { programId, ...activityData } = req.body
+    console.log(activityData)
 
     // Find the program by its ID
-    const program = await Program.findById(programId)
+    const program = await Program.findById(activityData.program)
     if (!program) {
       return res.status(404).json({ error: 'Program not found' })
     }

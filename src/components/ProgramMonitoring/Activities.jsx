@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { RiMiniProgramFill } from 'react-icons/ri'
 import { FaHourglassStart } from 'react-icons/fa'
 import { FaHourglassEnd } from 'react-icons/fa'
@@ -27,6 +27,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import AddActivity from './AddActivity'
 import { useLocation } from 'react-router-dom'
+import axiosInstance from '../../axiosInstance'
 
 const EventList = ({ events }) => {
   const itemsPerPage = 5
@@ -66,8 +67,8 @@ const EventList = ({ events }) => {
         <CTableBody>
           {currentEvents.map((event, index) => (
             <CTableRow key={index}>
-              <CTableDataCell>{event.title}</CTableDataCell>
-              <CTableDataCell>{new Date(event.date).toLocaleString()}</CTableDataCell>
+              <CTableDataCell>{event.name}</CTableDataCell>
+              <CTableDataCell>{new Date(event.startDate).toLocaleString()}</CTableDataCell>
             </CTableRow>
           ))}
         </CTableBody>
@@ -94,8 +95,10 @@ const EventList = ({ events }) => {
 
 function Activities() {
   const [open, setOpen] = useState(false)
+  const [activities, setActivities] = useState()
   const location = useLocation()
   const program = location.state.program
+
   const handleAddActivity = () => {
     alert('Add Activity clicked!')
   }
@@ -110,6 +113,20 @@ function Activities() {
       </CContainer>
     )
   }
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await axiosInstance.post('/loadActivities', program.activities)
+        if (response.data) {
+          console.log(response.data)
+          setActivities(response.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchActivities()
+  }, [program])
   const programInfo = [
     {
       icon: <RiMiniProgramFill />,
@@ -124,7 +141,7 @@ function Activities() {
 
   return (
     <CContainer style={{ padding: '20px' }} className="mt-4">
-      <AddActivity open={open} setOpen={setOpen} />
+      <AddActivity open={open} setOpen={setOpen} program={program} />
       <CRow className="mb-3">
         <CCol xs={12} md={8}>
           <CCard className="text-center mb-3">
@@ -132,7 +149,7 @@ function Activities() {
             <CCardBody>
               <FullCalendar
                 plugins={[dayGridPlugin]}
-                events={program.activities}
+                events={activities}
                 initialView="dayGridMonth"
                 headerToolbar={{
                   left: 'prev,next today',

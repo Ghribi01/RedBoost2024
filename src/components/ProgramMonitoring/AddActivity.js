@@ -10,9 +10,9 @@ import {
   CFormTextarea,
 } from '@coreui/react'
 import axiosInstance from '../../axiosInstance.js'
-function AddActivity({ open, setOpen }) {
+function AddActivity({ open, setOpen, program }) {
   const [allDay, setAllDay] = useState(false) // State to track "All Day Activity" checkbox
-  const [activity, setActivity] = useState()
+  const [activity, setActivity] = useState({ program: program._id })
   const handleChange = (e) => {
     const { name, value } = e.target
     setActivity((prevAct) => ({
@@ -24,7 +24,7 @@ function AddActivity({ open, setOpen }) {
 
   const handleAddActivity = () => {
     try {
-      const response = axiosInstance.post('/addActivity',activity)
+      const response = axiosInstance.post('/addActivity', activity)
       if (response.data) {
         console.log('Activity created successfully')
       }

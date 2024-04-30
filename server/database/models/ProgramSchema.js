@@ -28,7 +28,7 @@ const programSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    programLead: {
+    programLead:{
       type: mongoose.Schema.Types.ObjectId,
       ref: User, // Reference to the User model
       required: true,
